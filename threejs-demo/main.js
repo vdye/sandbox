@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+import { ExampleShaderMaterial } from './customMaterial'
 
 let loaded = false;
 const scene = new THREE.Scene();
@@ -20,7 +21,7 @@ loader.load( 'assets/teapot.obj', function ( obj ) {
   mesh = obj;
 
   // Set the material
-  const material = new THREE.MeshLambertMaterial( { color: 0x00ffff } );
+  const material = ExampleShaderMaterial; //new THREE.MeshNormalMaterial( { color: 0x00ffff } );
   obj.children.forEach((childMesh) => {
     if (!childMesh) return;
     childMesh.material = material;
@@ -48,11 +49,14 @@ scene.add(light);
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.position.z = 5;
 
+let counter = 0;
 function animate() {
 	requestAnimationFrame( animate );
 
-    if (loaded) {
+    if (loaded && counter++ % 1 == 0) {
         mesh.rotation.z += 0.01;
+        // mesh.rotation.y += 0.02;
+        console.log(mesh.rotation.z);
     }
 	// cube.rotation.x += 0.01;
 	// cube.rotation.y += 0.01;
