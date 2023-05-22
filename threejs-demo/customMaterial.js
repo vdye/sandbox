@@ -55,3 +55,34 @@ export const ExampleShaderMaterial = new THREE.ShaderMaterial( {
 	fragmentShader: normalFS, //fragmentShader
 
 } );
+
+const texVertexShader = `
+  varying vec2 vUv;
+
+  void main() {
+    vUv = uv;
+
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const texFragmentShader = `
+  uniform sampler2D tex;
+  varying vec2 vUv;
+
+  void main() {
+    float newU = abs(vUv.x * 2.0 - 1.0);
+    gl_FragColor = texture2D(tex, vec2(newU, vUv.y));
+  }
+`;
+
+const texLoader = new THREE.TextureLoader();
+export const ExampleTextureMaterial = new THREE.ShaderMaterial( {
+
+  uniforms: {
+    tex: { type: "t", value: texLoader.load( "resources/images/ball_texture.png" ) }
+  },
+
+  vertexShader: texVertexShader,
+  fragmentShader: texFragmentShader
+} );

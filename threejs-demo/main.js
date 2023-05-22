@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
-import { ExampleShaderMaterial } from './customMaterial'
+import { ExampleShaderMaterial, ExampleTextureMaterial } from './customMaterial'
 
 let loaded = false;
 const scene = new THREE.Scene();
@@ -16,27 +16,32 @@ document.body.appendChild( renderer.domElement );
 // scene.add( cube );
 
 const loader = new OBJLoader();
-let mesh = null;
-loader.load( 'assets/teapot.obj', function ( obj ) {
-  mesh = obj;
+const geometry = new THREE.SphereGeometry( 1, 50, 50 );
+const texLoader = new THREE.TextureLoader();
+const material = ExampleTextureMaterial; //new THREE.MeshBasicMaterial( { map: texLoader.load('resources/images/ball_texture.png') } );
+let obj = new THREE.Mesh(geometry, material);
+scene.add( obj );
 
-  // Set the material
-  const material = ExampleShaderMaterial; //new THREE.MeshNormalMaterial( { color: 0x00ffff } );
-  obj.children.forEach((childMesh) => {
-    if (!childMesh) return;
-    childMesh.material = material;
-  });
+// loader.load( 'assets/teapot.obj', function ( obj ) {
+//   mesh = obj;
 
-  // Correct orientation & position
-  obj.scale.set( 0.1, 0.1, 0.1 );
-  obj.rotation.x = - 0.5 * Math.PI;
-  obj.position.y -= 1.5;
+//   // Set the material
+//   const material = ExampleShaderMaterial; //new THREE.MeshNormalMaterial( { color: 0x00ffff } );
+//   obj.children.forEach((childMesh) => {
+//     if (!childMesh) return;
+//     childMesh.material = material;
+//   });
 
-  scene.add( obj );
-  loaded = true;
-}, undefined, function ( error ) {
-  console.error( error );
-} );
+//   // Correct orientation & position
+//   obj.scale.set( 0.1, 0.1, 0.1 );
+//   obj.rotation.x = - 0.5 * Math.PI;
+//   obj.position.y -= 1.5;
+
+//   scene.add( obj );
+//   loaded = true;
+// }, undefined, function ( error ) {
+//   console.error( error );
+// } );
 
 // Add a light
 const color = 0xFFFFFF;
@@ -58,6 +63,8 @@ function animate() {
         // mesh.rotation.y += 0.02;
         console.log(mesh.rotation.z);
     }
+  obj.rotation.x += 0.01;
+  obj.rotation.y += 0.01;
 	// cube.rotation.x += 0.01;
 	// cube.rotation.y += 0.01;
 
